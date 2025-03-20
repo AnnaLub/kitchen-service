@@ -123,4 +123,4 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "kitchen_service.Cook"
+AUTH_USER_MODEL = "kitchen.Cook"
