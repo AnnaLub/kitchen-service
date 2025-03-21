@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from kitchen_service.settings import AUTH_USER_MODEL
 
 
 class DishType(models.Model):
@@ -10,7 +9,7 @@ class DishType(models.Model):
     class Meta:
         ordering = ["name"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -21,7 +20,7 @@ class Cook(AbstractUser):
         verbose_name = "cook"
         verbose_name_plural = "cooks"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.username} ({self.first_name} {self.last_name})"
 
 
@@ -29,17 +28,18 @@ class Dish(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     price = models.DecimalField(max_digits=5, decimal_places=2)
-    dish_type = models.ForeignKey(DishType, on_delete=models.CASCADE,related_name="dishes")
+    dish_type = models.ForeignKey(DishType,
+                                  on_delete=models.CASCADE,
+                                  related_name="dishes")
     cooks = models.ManyToManyField(Cook, related_name="dishes")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
+
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=100, unique=True)
     dish = models.ManyToManyField(Dish, related_name="ingredients")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
-
-
