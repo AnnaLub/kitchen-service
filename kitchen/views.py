@@ -1,8 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from .models import DishType, Dish, Cook, Ingredient
 
 # Create your views here.
+@login_required
 def index(request:HttpRequest) -> HttpResponse:
     num_cooks = Cook.objects.count()
     num_dishes = Dish.objects.count()
@@ -18,4 +20,4 @@ def index(request:HttpRequest) -> HttpResponse:
         "num_visits": num_visits,
     }
 
-    return render(request, "taxi/index.html", context=context)
+    return render(request, "kitchen/index.html", context=context)
