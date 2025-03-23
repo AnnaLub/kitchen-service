@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
   <h1>Restaurant kitchen service Home</h1>
-    <p>Welcome to Best Restaurant Kitchen Ever!</p>
-    <h2>Dynamic content</h2>
-    <p>The Kitchen service has the following record counts:</p>
-    <ul>
-        <li><strong>Dishes:</strong> {{ num_dishes }}</li>
-        <li><strong>Cooks:</strong> {{ num_cooks }}</li>
-        <li><strong>Dishes type:</strong> {{ num_dish_types }}</li>
-       <li><strong>Ingredients for dishes:</strong> {{ num_ingredients }}</li>
-    </ul>
+  <p>Welcome to Best Restaurant Kitchen Ever!</p>
+  <h2>Dynamic content</h2>
+  <p>The Kitchen service has the following record counts:</p>
+  <ul>
+    <li><strong>Dishes:</strong> {{ num_dishes }}</li>
+    <li><strong>Cooks:</strong> {{ num_cooks }}</li>
+    <li><strong>Dishes type:</strong> {{ num_dish_types }}</li>
+    <li><strong>Ingredients for dishes:</strong> {{ num_ingredients }}</li>
+  </ul>
 
-    <p>You have visited this page
-        {{ num_visits }} time{{ num_visits|pluralize }}.
-    </p>
+  <p>You have visited this page
+    {{ num_visits }} time{{ num_visits|pluralize }}.
+  </p>
 {% endblock %}
