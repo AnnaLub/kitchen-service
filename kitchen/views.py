@@ -93,3 +93,9 @@ class IngredientDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Ingredient
     template_name = "kitchen/ingredient_confirm_delete.html"
     success_url = reverse_lazy("kitchen:ingredient-list")
+
+
+class CookDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Cook
+    queryset = Cook.objects.all().prefetch_related("dishes__dish_type")
+    template_name = "kitchen/cook_detail.html"
