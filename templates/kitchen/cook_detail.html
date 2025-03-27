@@ -21,5 +21,9 @@
   <br>
   <h4><a href="{% url 'kitchen:cook-delete' pk=cook.id %}"
          class="btn btn-danger link-to-page">Delete</a>
+  
+      <a href="{% url 'kitchen:cook-update' pk=cook.id %}" class="btn btn-secondary link-to-page">
+      Update data
+    </a>
   </h4>
 {% endblock %}

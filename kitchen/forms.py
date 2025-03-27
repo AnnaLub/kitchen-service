@@ -19,10 +19,20 @@ class CookCreationForm(UserCreationForm):
     class Meta:
         model = Cook
         fields = (UserCreationForm.Meta.fields +
-                  ("first_name","last_name", "years_of_experience"))
+                  ("first_name", "last_name", "years_of_experience"))
 
     def clean_years_of_experience(self):
-        years_of_experience = self.cleaned_data['years_of_experience']
+        years_of_experience = self.cleaned_data["years_of_experience"]
+        return validate_year_of_experience(years_of_experience)
+
+
+class CookUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Cook
+        fields = ("years_of_experience", "email",)
+
+    def clean_years_of_experience(self):
+        years_of_experience = self.cleaned_data["years_of_experience"]
         return validate_year_of_experience(years_of_experience)
 
 
