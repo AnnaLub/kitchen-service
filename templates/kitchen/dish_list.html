@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Dish list</h1>
+  <h1>Dish list
+    <a href="{% url 'kitchen:dish-create' %}"
+       class="btn btn-primary link-to-page">+</a>
+  </h1>
   {% if dish_list %}
-    <table>
+    <table class="table">
       <tr>
         <th>ID</th>
         <th>Name</th>
@@ -20,9 +23,9 @@
           <td><a href="#">Update</a></td>
           <td><a href="#">Delete</a></td>
         </tr>
-     {% endfor %}  
+      {% endfor %}
     </table>
-    {% else %}
+  {% else %}
     <p>There are no dishes in service.</p>
   {% endif %}
 {% endblock %}

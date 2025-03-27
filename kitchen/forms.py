@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
 from kitchen.models import Dish, Ingredient, Cook
@@ -42,3 +43,15 @@ def validate_year_of_experience(value: int):
     elif value > 30:
         raise forms.ValidationError("year of experience must be less than 30")
     return value
+
+
+class DishForm(forms.ModelForm):
+    cooks = forms.ModelMultipleChoiceField(
+        queryset=get_user_model().objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    class Meta:
+        model = Dish
+        fields = "__all__"
