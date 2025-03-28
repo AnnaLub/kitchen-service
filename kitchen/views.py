@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .forms import IngredientForm, CookCreationForm, CookUpdateForm, DishForm
+from .forms import CookCreationForm, CookUpdateForm, DishForm
 from .models import DishType, Dish, Cook, Ingredient
 
 
@@ -60,7 +60,7 @@ class DishTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DishListView(LoginRequiredMixin, generic.ListView):
     model = Dish
     template_name = "kitchen/dish_list.html"
-    queryset = Dish.objects.all().select_related("dish_type")
+    queryset = Dish.objects.all().select_related("dish_type").prefetch_related("ingredients", "cooks")
     paginate_by = 5
 
 
@@ -70,12 +70,28 @@ class DishCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("kitchen:dish-list")
 
 
+class DishUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Dish
+    form_class = DishForm
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy("kitchen:dish-detail", kwargs={"pk": self.object.pk})
+
+
+class DishDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Dish
+    success_url = reverse_lazy("kitchen:dish-list")
+
+
+class DishDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Dish
+
+
 
 class CookListView(LoginRequiredMixin, generic.ListView):
     model = Cook
-    paginate_by = 5
     template_name = "kitchen/cook_list.html"
-
+    paginate_by = 5
 
 class CookDetailView(LoginRequiredMixin, generic.DetailView):
     model = Cook
@@ -103,21 +119,19 @@ class CookUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class IngredientListView(LoginRequiredMixin, generic.ListView):
     model = Ingredient
-    paginate_by = 5
     template_name = "kitchen/ingredient_list.html"
-    queryset = Ingredient.objects.all().prefetch_related("dish")
-
+    paginate_by = 5
 
 class IngredientCreateView(LoginRequiredMixin, generic.CreateView):
     model = Ingredient
-    form_class = IngredientForm
+    fields = "__all__"
     success_url = reverse_lazy("kitchen:ingredient-list")
     template_name = "kitchen/ingredient_form.html"
 
 
 class IngredientUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Ingredient
-    form_class = IngredientForm
+    fields = "__all__"
     success_url = reverse_lazy("kitchen:ingredient-list")
     template_name = "kitchen/ingredient_form.html"
 
@@ -126,5 +140,3 @@ class IngredientDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Ingredient
     template_name = "kitchen/ingredient_confirm_delete.html"
     success_url = reverse_lazy("kitchen:ingredient-list")
-
-
