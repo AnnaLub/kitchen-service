@@ -5,17 +5,6 @@ from django.contrib.auth.forms import UserCreationForm
 from kitchen.models import Dish, Ingredient, Cook
 
 
-class IngredientForm(forms.ModelForm):
-    dish = forms.ModelMultipleChoiceField(
-        queryset=Dish.objects.all(),
-        widget= forms.CheckboxSelectMultiple,
-        required=False,)
-
-    class Meta:
-        model = Ingredient
-        fields = "__all__"
-
-
 class CookCreationForm(UserCreationForm):
     class Meta:
         model = Cook
@@ -52,6 +41,12 @@ class DishForm(forms.ModelForm):
         required=False
     )
 
+    ingredients = forms.ModelMultipleChoiceField(
+        queryset=Ingredient.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
     class Meta:
         model = Dish
-        fields = "__all__"
+        fields = ("name", "dish_type", "ingredients", "description", "price", "cooks")
