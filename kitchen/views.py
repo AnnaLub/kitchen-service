@@ -6,7 +6,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .forms import CookCreationForm, CookUpdateForm, DishForm
+from .forms import CookCreationForm, CookUpdateForm, DishForm, DishSearchForm, CookSearchForm, DishTypeSearchForm, \
+    IngredientSearchForm
 from .models import DishType, Dish, Cook, Ingredient
 
 
@@ -36,6 +37,21 @@ class DishTypeListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "dish_type_list"
     paginate_by = 5
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(DishTypeListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name")
+        context["search_form"] = DishTypeSearchForm(
+            initial={"name": name})
+        return context
+
+    def get_queryset(self):
+        queryset = DishType.objects.all()
+        name = self.request.GET.get("name")
+        if name:
+            return queryset.filter(name__icontains=name)
+        return queryset
+
+
 
 class DishTypeCreateView(LoginRequiredMixin, generic.CreateView):
     model = DishType
@@ -60,8 +76,21 @@ class DishTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DishListView(LoginRequiredMixin, generic.ListView):
     model = Dish
     template_name = "kitchen/dish_list.html"
-    queryset = Dish.objects.all().select_related("dish_type").prefetch_related("ingredients", "cooks")
     paginate_by = 5
+
+    def get_queryset(self):
+        queryset = Dish.objects.select_related("dish_type").prefetch_related("cooks", "ingredients")
+        form = DishSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
+        return queryset
+
+    def get_context_data(self,*, object_list = None,**kwargs):
+        context = super(DishListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name")
+        context["search_form"] = DishSearchForm(
+            initial={"name": name})
+        return context
 
 
 class DishCreateView(LoginRequiredMixin, generic.CreateView):
@@ -93,6 +122,23 @@ class CookListView(LoginRequiredMixin, generic.ListView):
     template_name = "kitchen/cook_list.html"
     paginate_by = 5
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CookListView, self).get_context_data(**kwargs)
+        username = self.request.GET.get("username")
+        context["search_form"] = CookSearchForm(
+            initial={"username": username})
+        return context
+
+    def get_queryset(self):
+        queryset = Cook.objects.all()
+        form = CookSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
+        return queryset
+
+
 class CookDetailView(LoginRequiredMixin, generic.DetailView):
     model = Cook
     queryset = Cook.objects.all().prefetch_related("dishes__dish_type")
@@ -116,11 +162,29 @@ class CookUpdateView(LoginRequiredMixin, generic.UpdateView):
     form_class = CookUpdateForm
     success_url = reverse_lazy("kitchen:cook-list")
 
+    def get_success_url(self, **kwargs):
+        return reverse_lazy("kitchen:cook-detail", kwargs={"pk": self.object.pk})
+
 
 class IngredientListView(LoginRequiredMixin, generic.ListView):
     model = Ingredient
     template_name = "kitchen/ingredient_list.html"
     paginate_by = 5
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(IngredientListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name")
+        context["search_form"] = IngredientSearchForm(
+            initial={"name": name})
+        return context
+
+    def get_queryset(self):
+        queryset = Ingredient.objects.all()
+        name = self.request.GET.get("name")
+        if name:
+            return queryset.filter(name__icontains=name)
+        return queryset
+
 
 class IngredientCreateView(LoginRequiredMixin, generic.CreateView):
     model = Ingredient
