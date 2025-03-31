@@ -50,3 +50,44 @@ class DishForm(forms.ModelForm):
     class Meta:
         model = Dish
         fields = ("name", "dish_type", "ingredients", "description", "price", "cooks")
+
+
+class DishSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=100,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by name", }
+        )
+    )
+
+class CookSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=100,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by username", }
+        )
+    )
+
+class DishTypeSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=100,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by name", }
+        )
+    )
+
+class IngredientSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=100,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by name", }
+        )
+    )
