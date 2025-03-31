@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
   <h1>Ingredient List
-  <a href="{% url 'kitchen:ingredient-create' %}"
+  <a style="float: right" href="{% url 'kitchen:ingredient-create' %}"
      class="btn btn-primary link-to-page">+</a>
   </h1>
+  {% include "includes/search_form.html" %}
   {% if ingredient_list %}
     <table class="table">
       <tr>

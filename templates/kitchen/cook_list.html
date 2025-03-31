@@ -1,9 +1,13 @@
 {% extends "base.html" %}
+
 {% block content %}
   <h1>Cook list
-    <a href="{% url 'kitchen:cook-create' %}" class="btn btn-primary link-to-page">
+    <a style="float: right"
+       href="{% url 'kitchen:cook-create' %}"
+       class="btn btn-primary link-to-page">
       Add new cook</a>
   </h1>
+  {% include "includes/search_form.html" %}
   {% if cook_list %}
     <table class="table">
       <tr>
@@ -17,8 +21,8 @@
         <tr>
           <td>{{ cook.id }}</td>
           <td>
-            <a href="{% url 'kitchen:cook-detail' pk=cook.id %}">{{ cook.username }} 
-            {% if user == cook %} (Me) {% endif %}
+            <a href="{% url 'kitchen:cook-detail' pk=cook.id %}">{{ cook.username }}
+              {% if user == cook %} (Me) {% endif %}
             </a>
           </td>
           <td>{{ cook.first_name }} </td>
