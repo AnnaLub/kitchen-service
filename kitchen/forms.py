@@ -47,9 +47,28 @@ class DishForm(forms.ModelForm):
         required=False
     )
 
+
     class Meta:
         model = Dish
         fields = ("name", "dish_type", "ingredients", "description", "price", "cooks")
+
+
+class DishUpdateForm(forms.ModelForm):
+    cooks = forms.ModelMultipleChoiceField(
+        queryset=get_user_model().objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    ingredients = forms.ModelMultipleChoiceField(
+        queryset=Ingredient.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    class Meta:
+        model = Dish
+        fields = ("ingredients", "description", "cooks")
 
 
 class DishSearchForm(forms.Form):
@@ -62,6 +81,7 @@ class DishSearchForm(forms.Form):
         )
     )
 
+
 class CookSearchForm(forms.Form):
     username = forms.CharField(
         max_length=100,
@@ -71,6 +91,7 @@ class CookSearchForm(forms.Form):
             attrs={"placeholder": "Search by username", }
         )
     )
+
 
 class DishTypeSearchForm(forms.Form):
     name = forms.CharField(
