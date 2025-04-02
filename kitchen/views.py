@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from .forms import CookCreationForm, CookUpdateForm, DishForm, DishSearchForm, CookSearchForm, DishTypeSearchForm, \
-    IngredientSearchForm
+    IngredientSearchForm, DishUpdateForm
 from .models import DishType, Dish, Cook, Ingredient
 
 
@@ -101,7 +101,7 @@ class DishCreateView(LoginRequiredMixin, generic.CreateView):
 
 class DishUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Dish
-    form_class = DishForm
+    form_class = DishUpdateForm
 
     def get_success_url(self, **kwargs):
         return reverse_lazy("kitchen:dish-detail", kwargs={"pk": self.object.pk})
@@ -114,7 +114,6 @@ class DishDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class DishDetailView(LoginRequiredMixin, generic.DetailView):
     model = Dish
-
 
 
 class CookListView(LoginRequiredMixin, generic.ListView):
@@ -204,3 +203,14 @@ class IngredientDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Ingredient
     template_name = "kitchen/ingredient_confirm_delete.html"
     success_url = reverse_lazy("kitchen:ingredient-list")
+
+
+@login_required
+def switch_responsibility_for_dish(request, pk):
+    cook = Cook.objects.get(pk=request.user.id)
+    dish = Dish.objects.get(id=pk)
+    if dish in cook.dishes.all():
+        cook.dishes.remove(pk)
+    else:
+        cook.dishes.add(pk)
+    return HttpResponseRedirect(reverse_lazy("kitchen:dish-detail", args=[pk]))

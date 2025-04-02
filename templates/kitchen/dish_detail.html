@@ -1,28 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
   <h1>
-    Dish: {{ dish.name }}
+    {{ dish.name }}
   </h1>
   <p><strong>Dish-type:</strong> {{ dish.dish_type }}</p>
   <p><strong>Description:</strong> {{ dish.description }}</p>
-  <p><strong>Price:</strong> {{ dish.price}} </p>
+  <p><strong>Price:</strong> {{ dish.price }} </p>
   <hr>
   <div>
-    <h5>Ingredients:</h5>
+    <h5>Ingredients:
+      <a href="{% url 'kitchen:dish-update' pk=dish.id %}"
+         class="btn btn-secondary link-to-page">Update
+      </a>
+    </h5>
     {% for ingredient in dish.ingredients.all %}
-    <p>{{ ingredient.name }}</p>
+      <p>{{ ingredient.name }}</p>
     {% endfor %}
   </div>
   <hr>
   <div>
-    <h5>Responsible Cooks:</h5>
+    <h5>Responsible Cooks:
+      {% if dish in user.dishes.all %}
+        <a href="{% url 'kitchen:switch-responsibility' pk=dish.id  %}" class="btn btn-danger link-to-page">Delete me
+        </a>
+      {% else %}
+        <a href="{% url 'kitchen:switch-responsibility' pk=dish.id  %}" class="btn btn-success link-to-page">Add me
+        </a>
+      {% endif %}
+    </h5>
+    <hr>
     {% for cook in dish.cooks.all %}
-    <p>{{ cook.username }} ({{ cook.first_name }} {{ cook.last_name }})</p>
+      <p>{{ cook.username }} ({{ cook.first_name }} {{ cook.last_name }})</p>
+      <hr>
     {% endfor %}
   </div>
-  <hr>
-  <h6>
-    <a href="{% url 'kitchen:dish-update' pk=dish.id %}" 
-       class="btn btn-secondary link-to-page">Update</a>
-  </h6>
 {% endblock %}

@@ -19,7 +19,9 @@ from .views import (index,
                     IngredientListView,
                     IngredientCreateView,
                     IngredientUpdateView,
-                    IngredientDeleteView,)
+                    IngredientDeleteView,
+                    switch_responsibility_for_dish,
+                    )
 
 urlpatterns = [
     path("", index, name="index"),
@@ -41,6 +43,7 @@ urlpatterns = [
     path("ingredients/create/", IngredientCreateView.as_view(), name="ingredient-create"),
     path("ingredients/<int:pk>/update/", IngredientUpdateView.as_view(), name="ingredient-update"),
     path("ingredients/<int:pk>/delete/", IngredientDeleteView.as_view(), name="ingredient-delete"),
+    path("cooks/<int:pk>/switch_responsibility/", switch_responsibility_for_dish, name="switch-responsibility"),
 ]
 
 app_name = "kitchen"
