@@ -2,7 +2,7 @@
   display: inline;
 }
 #logout-form button {
-  background: none;
+  background: #7a075f;
   border: none;
   cursor: pointer;
   padding: 0;
