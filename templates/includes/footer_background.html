@@ -1,0 +1,23 @@
+{% load static %}
+
+<footer class="footer pt-5 mt-5">
+  <hr class="horizontal dark mb-5">
+  <div class="container">
+    <div class=" row">
+      <div class="col-12">
+        <div class="text-center">
+          <h6 class="text-gradient text-primary font-weight-bolder " > Restaurant Kitchen Service</h6>
+        </div>
+      </div>
+      
+      <div class="col-12">
+        <div class="text-center">
+          <p class="my-4 text-sm">
+            You have visited this page
+            {{ num_visits }} time{{ num_visits|pluralize }}.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
