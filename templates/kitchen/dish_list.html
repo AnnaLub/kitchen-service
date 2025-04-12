@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "layouts/base.html" %}
 {% block content %}
   <h1>Dish list
     <a style="float: right" href="{% url 'kitchen:dish-create' %}"
@@ -6,7 +6,7 @@
   </h1>
   {% include "includes/search_form.html" %}
   {% if dish_list %}
-    <table class="table">
+    <table class="table table table-hover table-secondary">
       <tr>
         <th>ID</th>
         <th>Name</th>
@@ -17,10 +17,12 @@
       {% for dish in dish_list %}
         <tr>
           <td>{{ dish.id }}</td>
-          <td><a href="{% url 'kitchen:dish-detail' pk=dish.id %}">{{ dish.name }}</a></td>
+          <td><a href="{% url 'kitchen:dish-detail' pk=dish.id %}" class="text-decoration-underline">{{ dish.name }}</a>
+          </td>
           <td>{{ dish.dish_type }}</td>
           <td>{{ dish.price }}</td>
-          <td><a href="{% url 'kitchen:dish-delete' pk=dish.id %}">Delete</a></td>
+          <td><a href="{% url 'kitchen:dish-delete' pk=dish.id %}"
+                 class="text-decoration-underline">Delete</a></td>
         </tr>
       {% endfor %}
     </table>

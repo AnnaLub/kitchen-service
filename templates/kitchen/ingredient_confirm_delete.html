@@ -1,7 +1,7 @@
-{% extends "base.html" %}
+{% extends "layouts/base.html" %}
 {% block content %}
-  <h1>Delete Ingredient</h1>
-  <p>Are you sure you want to delete <strong>{{ ingredient.name }}</strong>?</p>
+  <h3>Delete Ingredient:</h3>
+  <h2>Are you sure you want to delete <strong>{{ ingredient.name }}</strong>?</h2>
   <form action="" method="post">
     {% csrf_token %}
     <input type="submit"

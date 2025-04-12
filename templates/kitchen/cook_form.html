@@ -1,10 +1,14 @@
-{% extends "base.html" %}
+{% extends "layouts/base.html" %}
 {% load crispy_forms_filters %}
 {% block content %}
+  <div class="align-content-lg-center">
   <h1>{{ object|yesno:"Update, Create" }} Cook</h1>
-  <form action="" method="post" novalidate>
+    <div class="form-inline d-inline-flex">
+  <form action="" method="post" novalidate class=" form-control-sm">
     {% csrf_token %}
     {{ form|crispy }}
     <input type="submit" value="Submit" class="btn btn-primary">
   </form>
+  </div>
+  </div>
 {% endblock %}
