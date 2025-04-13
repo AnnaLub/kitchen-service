@@ -1,0 +1,30 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+  <h1>Ingredient List
+  <a style="float: right" href="{% url 'kitchen:ingredient-create' %}"
+     class="btn btn-primary link-to-page">+</a>
+  </h1>
+  {% include "includes/search_form.html" %}
+  {% if ingredient_list %}
+    <table class="table table table-hover table-secondary">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Update</th>
+        <th>Delete</th>
+      </tr>
+      {% for ingredient in ingredient_list %}
+        <tr>
+          <td>{{ ingredient.id }}</td>
+          <td>{{ ingredient.name }}</td>
+          <td><a href="{% url 'kitchen:ingredient-update' pk=ingredient.id %}"
+                 class="text-decoration-underline">Update</a></td>
+          <td><a href="{% url 'kitchen:ingredient-delete' pk=ingredient.id %}"
+                 class="text-decoration-underline">Delete</a></td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>There are no ingredients in service.</p>
+  {% endif %}
+{% endblock %}

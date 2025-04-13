@@ -1,0 +1,38 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+  <h1>Cook list
+    <a style="float: right"
+       href="{% url 'kitchen:cook-create' %}"
+       class="btn btn-primary link-to-page">
+      Add new cook</a>
+  </h1>
+  {% include "includes/search_form.html" %}
+  {% if cook_list %}
+    <table class="table table-hover table-secondary">
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Email</th>
+      </tr>
+      {% for cook in cook_list %}
+        <tr>
+          <td>{{ cook.id }}</td>
+          <td>
+            <a href="{% url 'kitchen:cook-detail' pk=cook.id %}"
+               class="form-control-color">{{ cook.username }}
+              {% if user == cook %} (Me) {% endif %}
+            </a>
+          </td>
+          <td>{{ cook.first_name }} </td>
+          <td>{{ cook.last_name }}</td>
+          <td>{{ cook.email }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>There are no cooks in service.</p>
+  {% endif %}
+{% endblock %}

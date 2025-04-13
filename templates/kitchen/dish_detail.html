@@ -1,0 +1,43 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+  <div class="container container-fluid ">
+    <div class="row mx-10 mt-8 mx-auto text-center">
+      <div class="container">
+        <h1>
+          {{ dish.name }}
+        </h1>
+        <hr>
+        <p><strong>Dish-type:</strong> {{ dish.dish_type }}</p>
+        <p><strong>Description:</strong> {{ dish.description }}</p>
+        <p><strong>Price:</strong> {{ dish.price }} </p>
+        <hr>
+        <div>
+          <h5>Ingredients:
+            <a href="{% url 'kitchen:dish-update' pk=dish.id %}"
+               class="btn btn-secondary link-to-page">Update
+            </a>
+          </h5>
+          {% for ingredient in dish.ingredients.all %}
+            <p>{{ ingredient.name }}</p>
+          {% endfor %}
+        </div>
+        <hr>
+        <h5>Responsible Cooks:
+          {% if dish in user.dishes.all %}
+            <a href="{% url 'kitchen:switch-responsibility' pk=dish.id %}" class="btn btn-danger link-to-page">Delete
+              me
+            </a>
+          {% else %}
+            <a href="{% url 'kitchen:switch-responsibility' pk=dish.id %}" class="btn btn-success link-to-page">Add me
+            </a>
+          {% endif %}
+        </h5>
+        <hr>
+        {% for cook in dish.cooks.all %}
+          <p>{{ cook.username }} ({{ cook.first_name }} {{ cook.last_name }})</p>
+          <hr>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
