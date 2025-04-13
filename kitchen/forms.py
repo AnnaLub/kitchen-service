@@ -47,10 +47,10 @@ class DishForm(forms.ModelForm):
         required=False
     )
 
-
     class Meta:
         model = Dish
-        fields = ("name", "dish_type", "ingredients", "description", "price", "cooks")
+        fields = ("name", "dish_type", "ingredients",
+                  "description", "price", "cooks")
 
 
 class DishUpdateForm(forms.ModelForm):
@@ -102,6 +102,7 @@ class DishTypeSearchForm(forms.Form):
             attrs={"placeholder": "Search by name", }
         )
     )
+
 
 class IngredientSearchForm(forms.Form):
     name = forms.CharField(
