@@ -1,9 +1,8 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic
+from django.views.generic import TemplateView
 
 from .forms import (CookCreationForm,
                     CookUpdateForm,
@@ -17,23 +16,25 @@ from .models import DishType, Dish, Cook, Ingredient
 
 
 # Create your views here.
-@login_required
-def index(request:HttpRequest) -> HttpResponse:
-    num_cooks = Cook.objects.count()
-    num_dishes = Dish.objects.count()
-    num_dish_types = DishType.objects.count()
-    num_ingredients = Ingredient.objects.count()
-    num_visits = request.session.get("num_visits", 0)
-    request.session["num_visits"] = num_visits + 1
-    context = {
-        "num_cooks": num_cooks,
-        "num_dishes": num_dishes,
-        "num_dish_types": num_dish_types,
-        "num_ingredients": num_ingredients,
-        "num_visits": num_visits,
-    }
+class Index(LoginRequiredMixin, TemplateView):
+    template_name = "kitchen/index.html"
 
-    return render(request, "kitchen/index.html", context=context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        num_cooks = Cook.objects.count()
+        num_dishes = Dish.objects.count()
+        num_dish_types = DishType.objects.count()
+        num_ingredients = Ingredient.objects.count()
+        num_visits = self.request.session.get("num_visits", 0)
+        self.request.session["num_visits"] = num_visits + 1
+        context = {
+            "num_cooks": num_cooks,
+            "num_dishes": num_dishes,
+            "num_dish_types": num_dish_types,
+            "num_ingredients": num_ingredients,
+            "num_visits": num_visits,
+        }
+        return context
 
 
 class DishTypeListView(LoginRequiredMixin, generic.ListView):
@@ -212,12 +213,12 @@ class IngredientDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("kitchen:ingredient-list")
 
 
-@login_required
-def switch_responsibility_for_dish(request, pk):
-    cook = Cook.objects.get(pk=request.user.id)
-    dish = Dish.objects.get(id=pk)
-    if dish in cook.dishes.all():
-        cook.dishes.remove(pk)
-    else:
-        cook.dishes.add(pk)
-    return HttpResponseRedirect(reverse_lazy("kitchen:dish-detail", args=[pk]))
+class SwitchResponsibility(LoginRequiredMixin, generic.View):
+    def get(self, request, pk: int):
+        dish = Dish.objects.get(id=pk)
+        cook = request.user
+        if dish in cook.dishes.all():
+            cook.dishes.remove(pk)
+        else:
+            cook.dishes.add(pk)
+        return redirect(reverse_lazy("kitchen:dish-detail", args=[pk]))

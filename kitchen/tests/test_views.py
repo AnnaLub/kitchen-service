@@ -69,11 +69,11 @@ class PrivateDishTest(TestCase):
     def test_switch_responsibility_for_dish(self):
         dish = Dish.objects.get(id=1)
         url = reverse("kitchen:switch-responsibility", args=[dish.id])
-        self.client.post(url)
+        self.client.get(url)
         self.assertEqual(len(dish.cooks.all()), 1)
         self.assertIn(self.user, dish.cooks.all())
 
-        self.client.post(url)
+        self.client.get(url)
         self.assertNotIn(self.user, dish.cooks.all())
 
 
