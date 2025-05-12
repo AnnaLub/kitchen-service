@@ -8,6 +8,7 @@ https://restaurant-kitchen-service-qftx.onrender.com
 * Login: test.admin
 * Password: 1234
 <br/>
+
 ## Data structure
 
 ![img_2.png](https://github.com/AnnaLub/kitchen-service/blob/develop/static/img/img_2.png)
